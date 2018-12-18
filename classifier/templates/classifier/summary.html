@@ -1,0 +1,59 @@
+{% extends 'classifier/base.html' %}
+{% block content %}
+
+      <div class="container py-5">
+        <h1>Image Classification Summary</h1>
+          <p>How much progress has been made?<br><br></p>
+            <h4>Number of pictures classfied: {{ num_classified }} out of {{ num_total }}</h4>
+            <p class="small">-number of pictures classified by type-</p>
+            <table class="table table-bordered">
+                <tr>
+                    <thead>
+                    {% for data in img_count_dict %}
+
+                        <td scope="col">
+                            <strong>{{ data.0 }}</strong>
+                        </td>
+
+                    {% endfor %}
+                    </thead>
+                </tr>
+                <tr>
+                {% for data in img_count_dict %}
+                    <td>
+                            {{ data.1 }}
+                    </td>
+                {% endfor %}
+                </tr>
+            </table>
+            <h4>Leaderboard</h4>
+            <p class="small">-number of pictures classified by username-</p>
+            <table class="table table-bordered">
+            <thead>
+            <tr>
+                <td scope="col"><strong>username</strong></td>
+                <td scope="col"><strong># of images classified</strong></td>
+                <td scope="col"><strong>% of total</strong></td>
+                <td scope="col"><strong>last login</strong></td>
+            </tr>
+            </thead>
+            {% for record in user_with_percent %}
+            <tr>
+            <td>
+            {{ record.0 }}
+            </td>
+            <td>
+            {{ record.1.0 }}
+            </td>
+            <td>
+            {{ record.1.1 }}
+            </td>
+            <td>
+            {{ record.1.2 }}
+            </td>
+            </tr>
+            {% endfor %}
+            </table>
+
+      </div><!-- /.container -->
+{% endblock %}

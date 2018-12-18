@@ -1,0 +1,1 @@
+//main.js - some simple javascript used for the image classification site

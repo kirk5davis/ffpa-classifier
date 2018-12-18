@@ -1,0 +1,12 @@
+{% extends 'classifier/base.html' %}
+{% block content %}
+
+      <div class="container py-5">
+        <h1>Image Classification</h1>
+          <p>This tool will be used to generate <b>training sets of images for supervised machine learning models</b> used for determining prelimiary FFPA assessments.<br></p>
+            <p>
+            <button type="button" class="btn btn-secondary m-2" onclick="location.href='{% url 'classify_iter' next_item_to_classify %}'">Start Classifying Images</button>
+            </p>
+            <small>note: images to be classified must be pre-loaded</small>
+      </div><!-- /.container -->
+{% endblock %}

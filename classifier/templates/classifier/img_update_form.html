@@ -1,0 +1,39 @@
+{% extends 'classifier/base.html' %}
+{% block content %}
+
+      <div class="container py-5">
+        <h1>Image Classification Iterator</h1>
+        {% if user.is_authenticated %}
+      <p>Classify the image below and store it in the database:<br></p>
+          <img src="{{ first_item.image.url }}" width="400px" height="auto"/>
+          <br><br>
+            <form method="post">
+            {% csrf_token %}
+                {{ form.as_table }}
+                {{ form.updated_by_user.as_hidden }}
+            <br>
+            {% for class in classification_list %}
+            <input type="submit" class="btn btn-secondary m-2" value="{{ class }}" onclick="(function(){ document.getElementById('id_image_classification').value = '{{ class }}';
+    return True;
+})();return True;"> </input>
+            {% endfor %}
+            </form>
+            <small>note: only displays non-classified photos and clicking a class will store it forever</small>
+            <br><br>
+            <table class="table">
+                <tr>
+                    <td>
+                        <p style=""><a href="{% url 'classify_home' %}">Stop Classifying</a></p>
+                    </td>
+                    <td>
+                        <p><a href="{% url 'summary' %}">View Progress Summary</a></p>
+                    </td>
+                </tr>
+            </table>
+            {% else %}
+          <p>Please <a href="{% url 'login' %}">log-in</a> to begin classifying<br></p>
+      </div><!-- /.container -->
+      {% endif %}
+
+{% endblock %}
+
