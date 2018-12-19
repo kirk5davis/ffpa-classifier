@@ -2,10 +2,10 @@
 {% block content %}
 
       <div class="container py-5">
-        <h1>Image Classification Iterator</h1>
+        <h3>Image Classification Iterator</h3>
         {% if user.is_authenticated %}
       <p>Classify the image below and store it in the database:<br></p>
-          <img src="{{ first_item.image.url }}" width="400px" height="auto"/>
+          <img src="{{ first_item.image.url }}" width="60%" height="auto"/>
           <br><br>
             <form method="post">
             {% csrf_token %}
