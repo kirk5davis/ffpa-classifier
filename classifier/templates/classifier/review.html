@@ -4,13 +4,14 @@
       <div class="container py-5">
         <h1> Classification Review </h1>
         {% if user.is_authenticated %}
+        <p>Check out the current classifications for current images, if something looks odd - click on the images and change it.<br></p>
         <div id="accordion">
         {% for classification in classification_list %}
           <div class="card">
             <div class="card-header" id="test">
               <h5 class="mb-0">
-                <button class="btn btn-secondary m-2" data-toggle="collapse" data-target="#{{ classification }}" aria-expanded="false" aria-controls="{{ classification }}">
-                  {{ classification }}
+                <button class="btn btn-link bg-light text-dark" data-toggle="collapse" data-target="#{{ classification }}" aria-expanded="false" aria-controls="{{ classification }}">
+                    {{ classification }}
                 </button>
               </h5>
             </div>
@@ -19,7 +20,7 @@
           <div class="card-body">
             {% for img in imgs %}
                 {% if img.image_classification == classification %}
-                <a href="{% url 'classify_iter' img.id %}"><img class="review_img" src="{{ img.image.url }}" width="auto" height="auto"/></a>
+                <a href="{% url 'classify_iter' img.id %}"><img class="review_img m-1" src="{{ img.image.url }}" width="auto" height="auto"/></a>
                 {% endif %}
             {% endfor %}
           </div>
@@ -31,5 +32,7 @@
           <p>Please <a href="{% url 'login' %}">log-in</a> to review classifications<br></p>
           <br>
         {% endif %}
+        <br>
+        <button type="button" class="btn btn-secondary m-2" onclick="location.href='{% url 'summary' %}'">Go to Classification Summary</button>
       </div><!-- /.container -->
 {% endblock %}
