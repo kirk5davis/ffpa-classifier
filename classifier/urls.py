@@ -11,4 +11,5 @@ urlpatterns = [
     path('classify_imgs/<int:img_id>', views.classify_iter, name='classify_iter'),
     path('summary', views.summary, name='summary'),
     path('profile', views.profile, name='profile'),
+    path('review', views.review, name='review')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

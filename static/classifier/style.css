@@ -25,3 +25,11 @@ body {
 .green {
   color: seagreen;
 }
+
+.review_img{
+    background-color: #f5f5f5;
+}
+
+.review_img:hover{
+    opacity: 0.5;
+}

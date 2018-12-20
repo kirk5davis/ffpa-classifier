@@ -117,3 +117,15 @@ def profile(request):
         return HttpResponse(template.render(context, request))
     else:
         return HttpResponse(template.render({}, request))
+
+
+def review(request):
+    template = loader.get_template('classifier/review.html')
+    classification_types = Img.CLASSIFICATION_TYPES
+    class_list = [i[0] for i in classification_types]
+    imgs = [i for i in Img.objects.all()]
+    context = {
+        'classification_list': class_list,
+        'imgs': imgs,
+    }
+    return HttpResponse(template.render(context, request))
