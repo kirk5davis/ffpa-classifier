@@ -10,39 +10,52 @@ from django.contrib.auth.models import User
 # Create your views here.
 def index(request):
     classification_types = Img.CLASSIFICATION_TYPES
+    model_types = Img.WA_LANDSCAPE_MODEL_TYPE
     class_list = [i[1] for i in classification_types]
+    model_list = [i[1] for i in model_types]
     template = loader.get_template('classifier/index.html')
     context = {
         'classification_list': class_list,
+        'model_list': model_list,
     }
     return HttpResponse(template.render(context, request))
 
 
 def classify_home(request):
+    west_finished = None
+    east_finished = None
+    classification_types = Img.CLASSIFICATION_TYPES
+    class_list = [i[1] for i in classification_types]
     try:
-        classification_types = Img.CLASSIFICATION_TYPES
-        class_list = [i[1] for i in classification_types]
-        img_objs_to_classify = [i for i in Img.objects.all() if not i.image_classification]
-        first_img_obj = img_objs_to_classify[0].id
-        template = loader.get_template('classifier/classify_imgs.html')
-        context = {
-            'classification_list': class_list,
-            'next_item_to_classify': first_img_obj,
-        }
-        return HttpResponse(template.render(context, request))
-    except IndexError:
+        next_img_obj_to_classify_west = Img.objects.filter(image_classification='', model_type='WESTSIDE').first().id
+    except (IndexError, AttributeError) as west_finished:
+        next_img_obj_to_classify_west = None
+    try:
+        next_img_obj_to_classify_east = Img.objects.filter(image_classification='', model_type='EASTSIDE').first().id
+    except (IndexError, AttributeError) as east_finished:
+        next_img_obj_to_classify_east = None
+    if west_finished and east_finished:
         template = loader.get_template('classifier/success.html')
         return HttpResponse(template.render({}, request))
+    
+    template = loader.get_template('classifier/classify_imgs.html')
+    context = {
+        'classification_list': class_list,
+        'next_item_to_classify_west': next_img_obj_to_classify_west, 
+        'next_item_to_classify_east': next_img_obj_to_classify_east,
+    }
+    return HttpResponse(template.render(context, request))
+        
 
 
-def classify_iter(request, img_id):
+def classify_iter(request, model_type, img_id):
 
     # need to change this to class based views in order to do the post easier
     classification_types = Img.CLASSIFICATION_TYPES
     class_list = [i[0] for i in classification_types]
     # template = loader.get_template('classifier/classify_imgs_iter.html')
     template = loader.get_template('classifier/img_update_form.html')
-    img_obj = get_object_or_404(Img, pk=img_id)
+    img_obj = get_object_or_404(Img, pk=img_id, model_type=model_type)
 
     if request.method == 'POST':
         form = ImgUpdateForm(request.POST, instance=img_obj)
@@ -51,9 +64,9 @@ def classify_iter(request, img_id):
             print(request.user.username)
             form.instance.updated_by_user = request.user.username
             form.save()
-            next_img = Img.objects.filter(image_classification='').first()
+            next_img = Img.objects.filter(image_classification='', model_type=model_type).first()
             if next_img:
-                return redirect('classify_iter', img_id=next_img.id)
+                return redirect('classify_iter', img_id=next_img.id, model_type=next_img.model_type)
             if not next_img:
                 template = loader.get_template('classifier/success.html')
                 return HttpResponse(template.render({}, request))
@@ -123,9 +136,16 @@ def review(request):
     template = loader.get_template('classifier/review.html')
     classification_types = Img.CLASSIFICATION_TYPES
     class_list = [i[0] for i in classification_types]
-    imgs = [i for i in Img.objects.all()]
+    model_types = [i[1] for i in Img.WA_LANDSCAPE_MODEL_TYPE]
+    imgs_east = [i for i in Img.objects.all() if i.image_classification and i.model_type == 'EASTSIDE']
+    imgs_west = [i for i in Img.objects.all() if i.image_classification and i.model_type == 'WESTSIDE']
     context = {
         'classification_list': class_list,
-        'imgs': imgs,
+        'imgs_east': imgs_east,
+        'imgs_west': imgs_west,
     }
     return HttpResponse(template.render(context, request))
+
+def success(request):
+    template = loader.get_template('classifier/success.html')
+    return HttpResponse(template.render({}, request))

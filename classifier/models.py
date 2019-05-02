@@ -15,7 +15,7 @@ class Img(models.Model):
     )
 
     image = models.ImageField(upload_to='pics_to_classify/')
-    image_classification = models.CharField(max_length=12, choices=CLASSIFICATION_TYPES, blank=True)
+    image_classification = models.CharField(max_length=13, choices=CLASSIFICATION_TYPES, blank=True)
     model_type = models.CharField(max_length=8, choices=WA_LANDSCAPE_MODEL_TYPE, blank=True)
     updated_by_user = models.CharField(max_length=50, blank=True)
 
@@ -35,6 +35,12 @@ class Img(models.Model):
     @property
     def pictures_to_classify_east(self):
         return [i for i in Img.objects.all() if not i.image_classification and i.model_type == 'EASTSIDE']
+
+    def pictures_classified_west(self):
+        return [i for i in Img.objects.all() if i.image_classification and i.model_type == 'WESTSIDE']
+
+    def pictures_classified_east(self):
+        return [i for i in Img.objects.all() if i.image_classification and i.model_type == 'EASTSIDE']
 
     def __str__(self):
         if self.image_classification:

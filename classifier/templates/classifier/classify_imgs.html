@@ -4,8 +4,28 @@
       <div class="container py-5">
         <h1>Image Classification</h1>
           <p>This tool will be used to generate <b>training sets of images for supervised machine learning models</b> used for determining prelimiary FFPA assessments.<br></p>
-            <p>
-            <button type="button" class="btn btn-secondary m-2" onclick="location.href='{% url 'classify_iter' next_item_to_classify %}'">Start Classifying Images</button>
+          <p>Please select which model you would like to build data for:</p>
+            <div class="row">
+              {% if next_item_to_classify_west %}
+              <div class="col-md-6">
+                <a class="btn btn-secondary m-2" href="{% url 'classify_iter' 'WESTSIDE' next_item_to_classify_west %}">Westside Model Data</a>
+              </div>
+              {% else %}
+              <div class="col-md-6">
+                  Westside Model Data - Done
+              </div>
+              {% endif %}
+              {% if next_item_to_classify_east %}
+              <div class="col-md-6">
+                  <a class="btn btn-secondary m-2" href="{% url 'classify_iter' 'EASTSIDE' next_item_to_classify_east %}">Eastside Model Data</a>
+              </div>
+              {% else %}
+              <div class="col-md-6">
+                  <a class="btn btn-success m-2" href="{% url 'success'%}">Eastside Model Data - Done!</a>
+              </div>
+              {% endif %}
+            </div>
+            
             </p>
             <small>note: images to be classified must be pre-loaded</small>
       </div><!-- /.container -->

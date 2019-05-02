@@ -2,7 +2,7 @@
 {% block content %}
 
       <div class="container py-5">
-        <h3>Image Classification Iterator</h3>
+        <h3>Image Classification Iterator - <small style="text-transform: capitalize; color: crimson;"><strong>{{ first_item.model_type }}</strong></small></h3>
         {% if user.is_authenticated %}
       <p>Classify the image below and store it in the database:<br></p>
           <img src="{{ first_item.image.url }}" width="60%" height="auto"/>
@@ -26,7 +26,7 @@
             <table class="table">
                 <tr>
                     <td>
-                        <p style=""><a href="{% url 'classify_home' %}">Stop Classifying</a></p>
+                        <p style=""><a href="{% url 'classify_home' %}">Stop Classifying/Switch Models</a></p>
                     </td>
                     <td>
                         <p><a href="{% url 'summary' %}">View Progress Summary</a></p>
