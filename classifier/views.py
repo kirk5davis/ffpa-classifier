@@ -22,22 +22,20 @@ def index(request):
 
 
 def classify_home(request):
-    west_finished = None
-    east_finished = None
+
     classification_types = Img.CLASSIFICATION_TYPES
     class_list = [i[1] for i in classification_types]
     try:
         next_img_obj_to_classify_west = Img.objects.filter(image_classification='', model_type='WESTSIDE').first().id
-    except (IndexError, AttributeError) as west_finished:
+    except (IndexError, AttributeError):
         next_img_obj_to_classify_west = None
     try:
         next_img_obj_to_classify_east = Img.objects.filter(image_classification='', model_type='EASTSIDE').first().id
-    except (IndexError, AttributeError) as east_finished:
+    except (IndexError, AttributeError):
         next_img_obj_to_classify_east = None
-    if west_finished and east_finished:
+    if not next_img_obj_to_classify_west and not next_img_obj_to_classify_east:
         template = loader.get_template('classifier/success.html')
         return HttpResponse(template.render({}, request))
-    
     template = loader.get_template('classifier/classify_imgs.html')
     context = {
         'classification_list': class_list,
