@@ -5,6 +5,7 @@ from django.shortcuts import redirect
 from django.shortcuts import get_object_or_404
 from .forms import ImgUpdateForm
 from django.contrib.auth.models import User
+import random
 
 
 # Create your views here.
@@ -135,8 +136,23 @@ def review(request):
     classification_types = Img.CLASSIFICATION_TYPES
     class_list = [i[0] for i in classification_types]
     model_types = [i[1] for i in Img.WA_LANDSCAPE_MODEL_TYPE]
-    imgs_east = [i for i in Img.objects.all() if i.image_classification and i.model_type == 'EASTSIDE']
-    imgs_west = [i for i in Img.objects.all() if i.image_classification and i.model_type == 'WESTSIDE']
+    imgs_east = []
+    imgs_west = []
+    for classification in class_list:
+        try:
+            imgs_east += random.sample([i for i in Img.objects.all() if i.image_classification == classification and i.model_type == 'EASTSIDE'], k=100)
+        except IndexError:
+            pass
+        except ValueError:
+            # if sample is larger than population, take all
+            imgs_east += ([i for i in Img.objects.all() if i.image_classification == classification and i.model_type == 'EASTSIDE'])
+        try:
+            imgs_west += random.sample([i for i in Img.objects.all() if i.image_classification == classification and i.model_type == 'WESTSIDE'], k=100)
+        except IndexError:
+            pass
+        except ValueError:
+            # if sample is larger than population, take all
+            imgs_west += ([i for i in Img.objects.all() if i.image_classification == classification and i.model_type == 'WESTSIDE'])
     context = {
         'classification_list': class_list,
         'imgs_east': imgs_east,

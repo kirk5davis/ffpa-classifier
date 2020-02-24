@@ -1,11 +1,11 @@
 {% extends 'classifier/base.html' %}
 {% block content %}
-
+  {% if user.is_authenticated %}
       <div class="container py-5">
         <h1> Classification Review </h1>
-        {% if user.is_authenticated %}
-        <p>Check out the current classifications for current images, if something looks odd - click on the images and change it.<br></p>
-        <div class="row">
+        <p>Check out the current classifications for current images, if something looks odd - click on the images and change it. <mark class="small">Note: this review page only shows a random selection of 100 images per class per model. Reload page to see different images.</mark></p>
+      </div>
+      <div class="row px-4">
         <div class="col-md-6">
             <h2>Westside Model</h2>          
         <div id="accordion1">
@@ -60,10 +60,14 @@
             </div> 
           </div>
         {% else %}
+        <div class="container py-5">
+          <h1> Classification Review </h1>
           <p>Please <a href="{% url 'login' %}">log-in</a> to review classifications<br></p>
           <br>
         {% endif %}
         <br>
         <a class="btn btn-secondary m-2" href="{% url 'summary' %}">Go to Classification Summary</a>
+        <br>
+        <br>
       </div><!-- /.container -->
 {% endblock %}
