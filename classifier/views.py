@@ -58,8 +58,8 @@ def classify_iter(request, model_type, img_id):
     if request.method == 'POST':
         form = ImgUpdateForm(request.POST, instance=img_obj)
         if form.is_valid():
-            print(form.cleaned_data['image_classification'])
-            print(request.user.username)
+            # print(form.cleaned_data['image_classification'])
+            # print(request.user.username)
             form.instance.updated_by_user = request.user.username
             form.save()
             next_img = Img.objects.filter(image_classification='', model_type=model_type).first()
